@@ -52,4 +52,18 @@ map <- function(...) {
     conds <- paste(conds, collapse = ' & ')
     rownames(mrnaMapping[eval(parse(text = conds)), ])
 }
+
+loadAminoAcids <- function () {
+    aminoAcidPath <- '../chip/data/amino_acids.tsv'
+    aminoAcids <<- read.table(aminoAcidPath,
+                              col.names = c('Long', 'Short'),
+                              stringsAsFactors = FALSE)
+}
+
+loadGeneticCode <- function () {
+    geneticCodeFile <- '../rna/data/genetic_code.tsv'
+    geneticCode <<- read.table(geneticCodeFile, row.names = 1,
+                               col.names = c('', 'AA'),
+                               stringsAsFactors = FALSE)
+}
 # }}}
