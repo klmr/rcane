@@ -27,6 +27,13 @@ lpartial <- function(f, ...)
     let(capture = list(...),
         function (...) do.call(f, c(capture, list(...))))
 
+# Define shortcuts because these functions are so commonly used and constitute
+# syntactic noise.
+# Not something I would normally do but there's precedence in R; consider `c`.
+
+p <- partial
+lp <- lpartial
+
 #' Compose functions `g` and `f`. `compose(g, f)(...) = g(f(...))`.
 #' NB: Functions are applied in the inverse order of `roxygen::Compose`.
 #' <http://tolstoy.newcastle.edu.au/R/e9/help/10/02/4529.html>
