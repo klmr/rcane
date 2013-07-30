@@ -52,8 +52,14 @@ compose <- function (g, f)
             eval(thecall$y,
                  list(value = eval(thecall$x, env = parent.frame()))))
 
-slice <- function (x, ...)
-    x[...]
+groupby <- function (data, cond, FUN = sum) {
+    if (! is.list(cond))
+        cond <- list(cond)
+    result <- aggregate(data, by = cond, FUN)
+    rownames(result) <- result[[1]]
+    result[[1]] <- NULL
+    result
+}
 
 # TODO Handle negative indices?
 boolMask <- function (indices, length)
