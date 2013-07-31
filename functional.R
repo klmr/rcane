@@ -62,5 +62,5 @@ groupby <- function (data, cond, FUN = sum) {
 }
 
 # TODO Handle negative indices?
-boolMask <- function (indices, length)
+boolmask <- function (indices, length)
     is.element(1 : length, indices)
