@@ -73,4 +73,5 @@ groupby <- function (data, cond, FUN = sum) {
 boolmask <- function (indices, length)
     is.element(1 : length, indices)
 
+# Creates an item selector function for a given item
 item <- lp(p, `[[`)
