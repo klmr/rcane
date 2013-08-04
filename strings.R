@@ -10,7 +10,7 @@ strrstrip <- lp(sub, ' +$', '')
 
 strstrip <- strlstrip %.% strrstrip
 
-strrev <- function (str) paste(rev(strsplit(str, '')[[1]]), collapse = '')
+strrev <- p(paste, collapse = '') %.% rev %.% item(1) %.% p(strsplit, '')
 
 # FIXME This can be implemented in terms of `regmatches` somehow.
 #' Return the first match of a regular expression search inside a string.
