@@ -48,7 +48,7 @@ compose <- function (g, f)
 
 # Applies a list of functions to the same argument.
 fapply <- function (x, ...)
-    lapply(list(...), function (f) f(x))
+    lapply(x, function (xx) unlist(lapply(list(...), function (f) f(xx))))
 
 # Pipe operator modified after idea from Robert Sugar, e.g. at
 # <http://markmail.org/thread/uygwsdulfvxlydlh>
