@@ -40,7 +40,15 @@ lp <- lpartial
 compose <- function (g, f)
     function (...) g(f(...))
 
+# Dot operator (as in Haskell)
 `%.%` <- compose
+
+# Function chaining operator (as in F#)
+`%|>%` <- function (g, f) compose(f, g)
+
+# Applies a list of functions to the same argument.
+fapply <- function (x, ...)
+    lapply(list(...), function (f) f(x))
 
 # Pipe operator modified after idea from Robert Sugar, e.g. at
 # <http://markmail.org/thread/uygwsdulfvxlydlh>
@@ -64,3 +72,5 @@ groupby <- function (data, cond, FUN = sum) {
 # TODO Handle negative indices?
 boolmask <- function (indices, length)
     is.element(1 : length, indices)
+
+item <- lp(p, `[[`)
