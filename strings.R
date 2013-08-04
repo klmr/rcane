@@ -4,11 +4,11 @@
 # start with `str`. All functions working with a regular
 # expression start with `rx` instead.
 
-strlstrip <- function (str) sub('^ +', '', str)
+strlstrip <- lp(sub, '^ +', '')
 
-strrstrip <- function (str) sub(' +$', '', str)
+strrstrip <- lp(sub, ' +$', '')
 
-strstrip <- function (str) strlstrip(strrstrip(str))
+strstrip <- strlstrip %.% strrstrip
 
 strrev <- function (str) paste(rev(strsplit(str, '')[[1]]), collapse = '')
 
@@ -43,4 +43,4 @@ rxmatches <- function (pattern, text) {
 capitalize <- function (str) paste(toupper(substring(str, 1, 1)),
                                    substring(str, 2), sep = '')
 
-readable <- function (str) capitalize(gsub('_|-', ' ', str))
+readable <- capitalize %.% lp(gsub, '_|-', ' ')
