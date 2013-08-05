@@ -10,6 +10,7 @@ strrstrip <- lp(sub, ' +$', '')
 
 strstrip <- strlstrip %.% strrstrip
 
+# FIXME Vectorize
 strrev <- p(paste, collapse = '') %.% rev %.% item(1) %.% p(strsplit, '')
 
 # FIXME This can be implemented in terms of `regmatches` somehow.
