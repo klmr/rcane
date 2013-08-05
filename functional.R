@@ -1,5 +1,7 @@
 # Functional tools
 
+# Basic helpers {{{
+
 id <- function (x) x
 
 # This uses R's peculiarities in argument matching explained here:
@@ -8,6 +10,10 @@ id <- function (x) x
 # expression.
 let <- function (.expr, ...)
     eval(substitute(.expr), list2env(list(...), parent = parent.frame()))
+
+# }}}
+
+# Tools for function composition and chaining {{{
 
 #' Partial function application from right to left.
 #' NB: this is the opposite from the (wrongly-named) roxygen::Curry:
@@ -46,10 +52,6 @@ compose <- function (g, f)
 # Function chaining operator (as in F#)
 `%|>%` <- function (g, f) compose(f, g)
 
-# Applies a list of functions to the same argument.
-fapply <- function (x, ...)
-    lapply(x, function (xx) unlist(lapply(list(...), function (f) f(xx))))
-
 # Pipe operator modified after idea from Robert Sugar, e.g. at
 # <http://markmail.org/thread/uygwsdulfvxlydlh>
 `%|%` <- function (x, y)
@@ -60,6 +62,23 @@ fapply <- function (x, ...)
             eval(thecall$y,
                  list(value = eval(thecall$x, env = parent.frame()))))
 
+# }}}
+
+# Higher-order list functions {{{
+
+# Applies a list of functions to the same argument.
+fapply <- function (x, ...)
+    lapply(x, function (xx) unlist(lapply(list(...), function (f) f(xx))))
+
+# What is up with the naming of these (standard R) functions?
+
+map <- base::Map
+
+reduce <- base::Reduce
+
+# Hides `stats::filter` but I don't care.
+filter <- base::Filter
+
 groupby <- function (data, cond, FUN = sum) {
     if (! is.list(cond))
         cond <- list(cond)
@@ -69,9 +88,25 @@ groupby <- function (data, cond, FUN = sum) {
     result
 }
 
+# }}}
+
+# Helpers for working with ranges {{{
+
 # TODO Handle negative indices?
 boolmask <- function (indices, length)
     is.element(1 : length, indices)
 
+# Again, where does this naming come from?
+
+indices <- seq_along
+
+# }}}
+
 # Creates an item selector function for a given item
 item <- lp(p, `[[`)
+
+# Negates a function. Similar to `base::Negate`.
+neg <- function (f) `!` %.% f
+
+# Creates a lazy value retrieval function. `.(x)()` == x.
+. <- function (x) function () x
