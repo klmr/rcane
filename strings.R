@@ -41,7 +41,8 @@ rxmatches <- function (pattern, text) {
                if (is.null(x[[1]])) NULL else x)
 }
 
-capitalize <- function (str) paste(toupper(substring(str, 1, 1)),
-                                   substring(str, 2), sep = '')
+capitalize <-
+    p(fapply, toupper %.% p(substring, 1, 1), p(substring, 2)) %|>%
+    lp(do.call, paste0)
 
 readable <- capitalize %.% lp(gsub, '_|-', ' ')
