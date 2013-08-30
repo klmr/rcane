@@ -68,7 +68,7 @@ compose <- function (g, f)
 
 # Applies a list of functions to the same argument.
 fapply <- function (x, ...)
-    lapply(x, function (xx) unlist(lapply(list(...), function (f) f(xx))))
+    lapply(list(...), function (f) f(x))
 
 # What is up with the naming of these (standard R) functions?
 
