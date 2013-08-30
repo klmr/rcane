@@ -79,6 +79,20 @@ reduce <- base::Reduce
 # Hides `stats::filter` but I don't care.
 filter <- base::Filter
 
+# FIXME This is really inefficient, replace by manual implementation of `groupby`,
+# still incomplete:
+#groupby <- function (data, cond, FUN) {
+#    if (! is.list(cond))
+#        cond <- list(cond)
+#    # TODO Check that all condition vectors have the same length.
+#    cond <- lapply(cond, as.factor)
+#    len <- max(sapply(cond, nlevels))
+#    result <- `names<-`(as.list(rep('', ncol(data))), colnames(data))
+#
+#    for (i in 1 : length) {
+#        key <- unlist(lapply(cond, item(i)))
+#    }
+#}
 groupby <- function (data, cond, FUN = sum) {
     if (! is.list(cond))
         cond <- list(cond)
