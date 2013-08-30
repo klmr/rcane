@@ -108,5 +108,5 @@ item <- lp(p, `[[`)
 # Negates a function. Similar to `base::Negate`.
 neg <- function (f) `!` %.% f
 
-# Creates a lazy value retrieval function. `.(x)()` == x.
+# Creates a lazy value retrieval function. `.(x)() == x`.
 . <- function (x) function () x
