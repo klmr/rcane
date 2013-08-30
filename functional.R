@@ -100,6 +100,9 @@ boolmask <- function (indices, length)
 
 indices <- seq_along
 
+# Conditionally count elements.
+count <- length %.% which
+
 # }}}
 
 # Creates an item selector function for a given item
