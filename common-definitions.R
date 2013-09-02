@@ -18,6 +18,8 @@ colors <- colorRampPalette(brewer.pal(6, 'Dark2'))(10)
 # !!! The order of the colours is important, must reflect `tissues`.
 tissueColor <- c('liver' = colors[length(colors)], 'brain' = colors[1])
 
+source('plot-matrix.R')
+
 # Common functions {{{
 groupConditions <- function (geneCounts, conditions, mapping) {
     pcgc <- matrix(nrow = nrow(geneCounts),
