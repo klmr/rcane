@@ -108,6 +108,8 @@ count <- length %.% which
 # Creates an item selector function for a given item
 item <- lp(p, `[[`)
 
+items <- lp(p, `[`)
+
 # Negates a function. Similar to `base::Negate`.
 neg <- function (f) `!` %.% f
 
