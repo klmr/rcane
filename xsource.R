@@ -22,5 +22,5 @@ xsource <- function (module) {
         stop('Unable to load module ', module, '; not found in ',
              paste(Map(function (p) sprintf('"%s"', p), searchPath), collapse = ', '))
 
-    source(file.path(basepath, file), chdir = TRUE)
+    source(file.path(hits[1]), chdir = TRUE)
 }
