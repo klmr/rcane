@@ -1,4 +1,4 @@
-xsource <- function (module) {
+xsource <- function (module, attach = TRUE) {
     module <- as.character(substitute(module))
     # Prepend '' to ensure that at least one path component exists, otherwise
     # `file.path` will subsequently return an empty vector instead of ''.
@@ -22,5 +22,24 @@ xsource <- function (module) {
         stop('Unable to load module ', module, '; not found in ',
              paste(Map(function (p) sprintf('"%s"', p), searchPath), collapse = ', '))
 
-    source(file.path(hits[1]), chdir = TRUE)
+    xenv <- new.env(parent = globalenv())
+    class(xenv) <- 'xsourceenv'
+    xenv$.hits <- hits
+    local(source(file.path(.hits[1]), chdir = TRUE, local = TRUE),
+          envir = xenv)
+    if (attach)
+        base::attach(xenv, name = paste('xsource', module, sep = ':'))
+
+    invisible(xenv)
+}
+
+`::.xsourceenv` <- function (module, name)
+    module[[as.character(substitute(name))]]
+
+`::` <- function (pkg, name) {
+    pkgName <- as.character(substitute(pkg))
+    if (exists(pkgName) && is(pkg, 'xsourceenv'))
+        UseMethod('::')
+    else
+        getExportedValue(pkgName, as.character(substitute(name)))
 }
