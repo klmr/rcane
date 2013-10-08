@@ -114,4 +114,5 @@ items <- lp(p, `[`)
 neg <- function (f) `!` %.% f
 
 # Creates a lazy value retrieval function. `.(x)() == x`.
-. <- function (x) function () x
+# The retrieval function swallows all its arguments.
+. <- function (x) function (...) x
