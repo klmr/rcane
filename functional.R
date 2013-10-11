@@ -103,6 +103,12 @@ indices <- seq_along
 # Conditionally count elements.
 count <- length %.% which
 
+# Wrapper around `order` that returns the ordered data rather than the index
+# permutation. Like `sort`, but allows specifying multiple sort keys.
+sorted <- function (data, ..., decreasing = FALSE)
+    let(key = if (length(list(...)) == 0) colnames(data) else list(...),
+        data[do.call(order, c(lapply(key, lp(`[[`, data)), decreasing = decreasing)), ])
+
 # }}}
 
 # Creates an item selector function for a given item
