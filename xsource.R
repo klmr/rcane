@@ -1,3 +1,7 @@
+#' @TODO Only import files once; check whether module already present in search path
+#' @TODO Add a way of unloading/reloading a module
+#' @TODO Add explicit relative imports (e.g. \code{xsource(.basics)})
+
 #' Load an R code module
 #'
 #' A code module is an R source file ending in \code{.R} or \code{.r}.
