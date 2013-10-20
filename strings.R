@@ -45,4 +45,5 @@ capitalize <-
     p(fapply, toupper %.% p(substring, 1, 1), p(substring, 2)) %|>%
     lp(do.call, paste0)
 
+#' @TODO Make vectorised
 readable <- capitalize %.% lp(gsub, '_|-', ' ')
