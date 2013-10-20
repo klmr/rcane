@@ -3,15 +3,9 @@ library(RColorBrewer)
 source('basic.R')
 source('helpers.R')
 
-conditions <- c("brain_e15.5","brain_e18.5","brain_P0.5","brain_P4","brain_P22","brain_P29",
-                "liver_e15.5","liver_e18.5","liver_P0.5","liver_P4","liver_P22","liver_P29")
-conditionsBrain <- grep('brain', conditions)
-conditionsLiver <- grep('liver', conditions)
-
 tissues <- c(liver = 'liver', brain = 'brain')
 stages <- c('e15.5', 'e18.5', 'P0.5', 'P4', 'P22', 'P29')
 names(stages) <- stages
-methods <- c('scale', 'de', 'q')
 
 colors <- brewer.pal(8, 'Dark2')
 # !!! The order of these colours is important, must reflect `tissues`.
