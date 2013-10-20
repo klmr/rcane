@@ -1,5 +1,3 @@
-# Common functions for the tRNA project.
-
 library(RColorBrewer)
 
 source('basic.R')
@@ -12,11 +10,14 @@ conditionsLiver <- grep('liver', conditions)
 
 tissues <- c(liver = 'liver', brain = 'brain')
 stages <- c('e15.5', 'e18.5', 'P0.5', 'P4', 'P22', 'P29')
+names(stages) <- stages
 methods <- c('scale', 'de', 'q')
 
-colors <- colorRampPalette(brewer.pal(6, 'Dark2'))(10)
-# !!! The order of the colours is important, must reflect `tissues`.
-tissueColor <- c('liver' = colors[length(colors)], 'brain' = colors[1])
+colors <- brewer.pal(8, 'Dark2')
+# !!! The order of these colours is important, must reflect `tissues`.
+tissueColor <- c(liver = '#D01B24', brain = '#E6AB02')
+
+plotFamily <- 'Helvetica'
 
 source('plot-matrix.R')
 
@@ -56,14 +57,14 @@ map <- function(...) {
 }
 
 loadAminoAcids <- function () {
-    aminoAcidPath <- '../chip/data/amino_acids.tsv'
+    aminoAcidPath <- '../common/data/amino_acids.tsv'
     aminoAcids <<- read.table(aminoAcidPath,
                               col.names = c('Long', 'Short'),
                               stringsAsFactors = FALSE)
 }
 
 loadGeneticCode <- function () {
-    geneticCodeFile <- '../rna/data/genetic_code.tsv'
+    geneticCodeFile <- '../common/data/genetic_code.tsv'
     geneticCode <<- read.table(geneticCodeFile, row.names = 1,
                                col.names = c('', 'AA'),
                                stringsAsFactors = FALSE)
