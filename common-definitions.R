@@ -22,27 +22,6 @@ plotFamily <- 'Helvetica'
 source('plot-matrix.R')
 
 # Common functions {{{
-groupConditions <- function (geneCounts, conditions, mapping) {
-    pcgc <- matrix(nrow = nrow(geneCounts),
-                   ncol = length(conditions))
-
-    rownames(pcgc) <- rownames(geneCounts)
-    colnames(pcgc) <- conditions
-
-    for (cond in conditions) {
-        replicates <- rownames(mapping[mapping$Condition == cond, ])
-        pcgc[, cond] <- if (length(replicates) > 1)
-            rowMeans(geneCounts[, replicates]) else geneCounts[, replicates]
-    }
-    as.data.frame(pcgc)
-}
-
-normalize <- function (rawGeneCounts, conditionMap, mapping, method) {
-    normalizedGeneCounts <- method(rawGeneCounts)
-    conditions <- unique(conditionMap)
-    groupConditions(normalizedGeneCounts, conditions, mapping)
-}
-
 loadAminoAcids <- function () {
     aminoAcidPath <- '../common/data/amino_acids.tsv'
     aminoAcids <<- read.table(aminoAcidPath,
