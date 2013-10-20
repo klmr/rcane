@@ -1,4 +1,5 @@
 #' @TODO Only import files once; check whether module already present in search path
+#' @TODO N.B.: this requires the FULL path or some module-unique ID, I think.
 #' @TODO Add a way of unloading/reloading a module
 #' @TODO Add explicit relative imports (e.g. \code{xsource(.basics)})
 
