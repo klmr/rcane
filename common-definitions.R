@@ -43,19 +43,6 @@ normalize <- function (rawGeneCounts, conditionMap, mapping, method) {
     groupConditions(normalizedGeneCounts, conditions, mapping)
 }
 
-# FIXME no longer used?
-# Return IDs for a given criterion; example:
-#
-#   map(Tissue = brain, Stage = e15.5)
-map <- function(...) {
-    conds <- match.call(expand.dots = FALSE)$`...`
-    names(conds) <- paste('mrnaMapping', names(conds), sep='$')
-    conds <- paste(names(conds), gsub('(.*)', '"\\1"', conds),
-                   sep = ' == ')
-    conds <- paste(conds, collapse = ' & ')
-    rownames(mrnaMapping[eval(parse(text = conds)), ])
-}
-
 loadAminoAcids <- function () {
     aminoAcidPath <- '../common/data/amino_acids.tsv'
     aminoAcids <<- read.table(aminoAcidPath,
