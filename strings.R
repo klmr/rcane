@@ -47,3 +47,29 @@ capitalize <-
 
 #' @TODO Make vectorised
 readable <- capitalize %.% lp(gsub, '_|-', ' ')
+
+#' Like \code{switch}, with regular expressions.
+#'
+#' Replacement arguments can be either character strings which are used as the
+#' \code{replacement} argument to \code{sub}', or they can be functions taking
+#' a single character string and returning one.
+regswitch <- function (str, ..., FULL.MATCH = TRUE) {
+    alternatives <- list(...)
+    if (FULL.MATCH)
+        names(alternatives) <- sprintf('(?:^%s)$', names(alternatives))
+
+    tryPatterns <- function (str) {
+        for (p in names(alternatives)) {
+            m <- regexpr(p, str)
+            if (m[1] != -1) {
+                replacement <- alternatives[[p]]
+                if(is.character(replacement))
+                    return(sub(p, replacement, str))
+                else
+                    return(replacement(str))
+            }
+        }
+        str
+    }
+    sapply(str, tryPatterns)
+}
