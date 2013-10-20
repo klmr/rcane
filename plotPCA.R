@@ -1,5 +1,3 @@
-source('helpers.R')
-
 # data = prcomp data
 # dim1, dim2 = names of dimensions, e.g. 'Tissue', 'Stage'
 # values1, values2 = values of dimensions

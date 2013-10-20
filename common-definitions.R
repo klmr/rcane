@@ -1,7 +1,6 @@
 library(RColorBrewer)
 
 source('basic.R')
-source('helpers.R')
 
 tissues <- c(liver = 'liver', brain = 'brain')
 stages <- c('e15.5', 'e18.5', 'P0.5', 'P4', 'P22', 'P29')
