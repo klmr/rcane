@@ -56,4 +56,13 @@ loadGeneticCode <- function () {
                                col.names = c('', 'AA'),
                                stringsAsFactors = FALSE)
 }
+
+# FIXME Remove the TeXy hack once we switch to modules.
+oldReadable <- readable
+readable <- function (str)
+    paste(regswitch(unlist(strsplit(oldReadable(str), ' ')),
+                          e15.5 = 'E15.5',
+                          e18.5 = 'E18.5',
+                          '[dD]o(\\d{4})' = 'DO\\1'),
+          collapse = ' ')
 # }}}
