@@ -109,6 +109,18 @@ sorted <- function (data, ..., decreasing = FALSE)
     let(key = if (length(list(...)) == 0) colnames(data) else list(...),
         data[do.call(order, c(lapply(key, lp(`[[`, data)), decreasing = decreasing)), ])
 
+#' Like \code{c}, for dictionaries (\code{list}s with names).
+#'
+#' @examples
+#' cdict(list(a=1, b=NULL), list(a=NULL, b=2), list(c=3)) # list(a=1, b=2, c=3)
+cdict <- function (...) {
+    lists <- list(...)
+    names <- reduce(union, map(names, lists))
+
+    nonnull <- function (n, a, b) if (is.null(a[[n]])) b[[n]] else a[[n]]
+    reduce(function (a, b) map(function (n) nonnull(n, a, b), names), lists)
+}
+
 # }}}
 
 # Creates an item selector function for a given item
