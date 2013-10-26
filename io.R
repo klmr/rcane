@@ -1,8 +1,5 @@
 # I/O helper functions
 
-# FIXME Remove after refactoring is complete
-path <- file.path
-
 file.path <- function (..., ext = NULL, fsep = .Platform$file.sep) {
     dots <- list(...)
     if (! is.null(ext)) {
