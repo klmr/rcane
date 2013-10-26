@@ -131,6 +131,12 @@ items <- lp(p, `[`)
 # Negates a function. Similar to `base::Negate`.
 neg <- function (f) `!` %.% f
 
+#' @TODO Add %or% and %and% analogously
+
+#' Corresponds to the null-coalesce operator \code{??} in C#
+`%else%` <- function (a, b)
+    if(is.null(a) || is.na(a) || is.nan(a) || length(a) == 0) b else a
+
 # Creates a lazy value retrieval function. `.(x)() == x`.
 # The retrieval function swallows all its arguments.
 . <- function (x) function (...) x
