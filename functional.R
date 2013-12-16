@@ -141,6 +141,9 @@ neg <- function (f) `!` %.% f
 # The retrieval function swallows all its arguments.
 . <- function (x) function (...) x
 
+#' @TODO Implement argument name matching
+#' @TODO Implement `...`
+#' @TODO Rename to `.` (will change `.`’s semantics!)
 fun <- function (...) {
     args <- match.call(expand.dots = FALSE)$...
     last <- length(args)
@@ -159,6 +162,15 @@ fun <- function (...) {
             stop('Argument(s) missing')
         else if (length(dots) > length(params))
             stop('Unused argument(s)')
+        # Match the order of arguments if the caller specified arg names, to
+        # allow the following code:
+        #   fun(x, y = x - y)(y = 1, x = 2) # => 1
+        dots <- if (is.null(names(dots))) dots else {
+            matched <- dots[match(params, names(dots))]
+            matched <- matched[! is.na(names(matched))]
+            unmatched <- dots[names(dots) == '']
+            c(matched, unmatched)
+        }
         eval(args[[length(args)]], setNames(dots, params), enclos)
     }
 }
