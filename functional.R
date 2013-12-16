@@ -140,3 +140,25 @@ neg <- function (f) `!` %.% f
 # Creates a lazy value retrieval function. `.(x)() == x`.
 # The retrieval function swallows all its arguments.
 . <- function (x) function (...) x
+
+fun <- function (...) {
+    args <- match.call(expand.dots = FALSE)$...
+    last <- length(args)
+    params <- c(args[-last], names(args)[[last]])
+    if (length(args) > 1 && length(params) != length(args))
+        stop('Must be of the form `fun(a, b = expr)`')
+    for (arg in args[-last])
+        if (! is.name(arg))
+            stop('Invalid argument specifier: ', arg)
+
+    enclos <- parent.frame()
+
+    function (...) {
+        dots <- list(...)
+        if (length(dots) < length(params))
+            stop('Argument(s) missing')
+        else if (length(dots) > length(params))
+            stop('Unused argument(s)')
+        eval(args[[length(args)]], setNames(dots, params), enclos)
+    }
+}
