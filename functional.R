@@ -11,38 +11,29 @@ id <- function (x) x
 let <- function (.expr, ...)
     eval(substitute(.expr), list2env(list(...), parent = parent.frame()))
 
-#' @TODO Implement argument name matching
-#' @TODO Implement `...`
-#' @TODO Rename to `.` (will change `.`’s semantics!)
+#' Create a closure over a given environment for the specified formals and body.
+closure <- function (formals, body, env)
+    eval(call('function', as.pairlist(formals), body), env)
+
+#' A shortcut to create a function
+#'
+#' @note Using \code{.(args = body)} is analogous to using
+#' \code{function (args) body} with one exception: \code{.} arguments do not
+#' support defaults.
+#' Since its purpose is mainly for lambdas in higher-order list functions, this
+#' functionality is not needed.
 . <- function (...) {
     args <- match.call(expand.dots = FALSE)$...
     last <- length(args)
     params <- c(args[-last], names(args)[[last]])
+    params <- setNames(lapply(params, function (p) quote(expr = )), params)
     if (length(args) > 1 && length(params) != length(args))
         stop('Must be of the form `fun(a, b = expr)`')
     for (arg in args[-last])
         if (! is.name(arg))
             stop('Invalid argument specifier: ', arg)
 
-    enclos <- parent.frame()
-
-    function (...) {
-        dots <- list(...)
-        if (length(dots) < length(params))
-            stop('Argument(s) missing')
-        else if (length(dots) > length(params))
-            stop('Unused argument(s)')
-        # Match the order of arguments if the caller specified arg names, to
-        # allow the following code:
-        #   fun(x, y = x - y)(y = 1, x = 2) # => 1
-        dots <- if (is.null(names(dots))) dots else {
-            matched <- dots[match(params, names(dots))]
-            matched <- matched[! is.na(names(matched))]
-            unmatched <- dots[names(dots) == '']
-            c(matched, unmatched)
-        }
-        eval(args[[length(args)]], setNames(dots, params), enclos)
-    }
+    closure(params, args[[last]], parent.frame())
 }
 
 # }}}
