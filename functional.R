@@ -11,14 +11,10 @@ id <- function (x) x
 let <- function (.expr, ...)
     eval(substitute(.expr), list2env(list(...), parent = parent.frame()))
 
-# Creates a lazy value retrieval function. `.(x)() == x`.
-# The retrieval function swallows all its arguments.
-. <- function (x) function (...) x
-
 #' @TODO Implement argument name matching
 #' @TODO Implement `...`
 #' @TODO Rename to `.` (will change `.`’s semantics!)
-fun <- function (...) {
+. <- function (...) {
     args <- match.call(expand.dots = FALSE)$...
     last <- length(args)
     params <- c(args[-last], names(args)[[last]])
