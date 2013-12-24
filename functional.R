@@ -160,7 +160,7 @@ item <- lp(p, `[[`)
 items <- lp(p, `[`)
 
 # Negates a function. Similar to `base::Negate`.
-neg <- function (f) `!` %.% f
+neg <- p(compose, `!`)
 
 #' @TODO Add %or% and %and% analogously
 
