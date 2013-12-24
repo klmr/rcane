@@ -1,5 +1,12 @@
 # Functional tools
 
+#' This module re-creates quite a few fundamental tools from `pryr`. Why not
+#' `require(pryr)` instead? The only reason is that pryr contains many more
+#' utilities which have no place at all in this module. In addition, it does
+#' some things subtly different.
+#' Once I manage to put proper name isolation into place, this decision should
+#' be revisited.
+
 # Basic helpers {{{
 
 id <- function (x) x
@@ -91,6 +98,7 @@ compose <- function (g, f)
 
 # Higher-order list functions {{{
 
+#' @TODO Extend to more than one argument
 # Applies a list of functions to the same argument.
 fapply <- function (x, ...)
     lapply(list(...), function (f) f(x))
@@ -117,11 +125,9 @@ groupby <- function (data, cond, FUN = sum) {
 
 # Helpers for working with ranges {{{
 
-# TODO Handle negative indices?
+#' @TODO Handle negative indices?
 boolmask <- function (indices, length)
     is.element(1 : length, indices)
-
-# Again, where does this naming come from?
 
 indices <- seq_along
 
