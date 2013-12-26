@@ -22,6 +22,10 @@ let <- function (.expr, ...)
 closure <- function (formals, body, env)
     eval(call('function', as.pairlist(formals), body), env)
 
+#' Create a list of empty symbols, with names set
+symlist <- function (names)
+    setNames(Map(function (p) quote(expr = ), names), names)
+
 #' A shortcut to create a function
 #'
 #' @note Using \code{.(args = body)} is analogous to using
@@ -32,8 +36,7 @@ closure <- function (formals, body, env)
 . <- function (...) {
     args <- match.call(expand.dots = FALSE)$...
     last <- length(args)
-    params <- c(args[-last], names(args)[[last]])
-    params <- setNames(lapply(params, function (p) quote(expr = )), params)
+    params <- symlist(c(args[-last], names(args)[[last]]))
     if (length(args) > 1 && length(params) != length(args))
         stop('Must be of the form `fun(a, b = expr)`')
     for (arg in args[-last])
