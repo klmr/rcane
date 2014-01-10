@@ -29,3 +29,13 @@ progress <- function (x, max = 100) {
     if (x == max)
         cat('\n')
 }
+
+#' @TODO Integrate with functional … re-think organisation!
+map_with_progress <- function (f, ...) {
+    max_progress <- mapply(function (x) max(length(x)), list(...))
+    progress(0, max_progress)
+    invisible(Map(function (i, ...) {
+        on.exit(progress(i, max_progress))
+        f(...)
+    }, 1 : max_progress, ...))
+}

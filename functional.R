@@ -1,5 +1,12 @@
 # Functional tools
 
+#' This module re-creates quite a few fundamental tools from `pryr`. Why not
+#' `require(pryr)` instead? The only reason is that pryr contains many more
+#' utilities which have no place at all in this module. In addition, it does
+#' some things subtly different.
+#' Once I manage to put proper name isolation into place, this decision should
+#' be revisited.
+
 # Basic helpers {{{
 
 id <- function (x) x
@@ -10,6 +17,34 @@ id <- function (x) x
 # expression.
 let <- function (.expr, ...)
     eval(substitute(.expr), list2env(list(...), parent = parent.frame()))
+
+#' Create a closure over a given environment for the specified formals and body.
+closure <- function (formals, body, env)
+    eval(call('function', as.pairlist(formals), body), env)
+
+#' Create a list of empty symbols, with names set
+symlist <- function (names)
+    setNames(Map(function (p) quote(expr = ), names), names)
+
+#' A shortcut to create a function
+#'
+#' @note Using \code{.(args = body)} is analogous to using
+#' \code{function (args) body} with one exception: \code{.} arguments do not
+#' support defaults.
+#' Since its purpose is mainly for lambdas in higher-order list functions, this
+#' functionality is not needed.
+. <- function (...) {
+    args <- match.call(expand.dots = FALSE)$...
+    last <- length(args)
+    params <- symlist(c(args[-last], names(args)[[last]]))
+    if (length(args) > 1 && length(params) != length(args))
+        stop('Must be of the form `fun(a, b = expr)`')
+    for (arg in args[-last])
+        if (! is.name(arg))
+            stop('Invalid argument specifier: ', arg)
+
+    closure(params, args[[last]], parent.frame())
+}
 
 # }}}
 
@@ -66,6 +101,7 @@ compose <- function (g, f)
 
 # Higher-order list functions {{{
 
+#' @TODO Extend to more than one argument
 # Applies a list of functions to the same argument.
 fapply <- function (x, ...)
     lapply(list(...), function (f) f(x))
@@ -92,11 +128,9 @@ groupby <- function (data, cond, FUN = sum) {
 
 # Helpers for working with ranges {{{
 
-# TODO Handle negative indices?
+#' @TODO Handle negative indices?
 boolmask <- function (indices, length)
     is.element(1 : length, indices)
-
-# Again, where does this naming come from?
 
 indices <- seq_along
 
@@ -129,36 +163,10 @@ item <- lp(p, `[[`)
 items <- lp(p, `[`)
 
 # Negates a function. Similar to `base::Negate`.
-neg <- function (f) `!` %.% f
+neg <- p(compose, `!`)
 
 #' @TODO Add %or% and %and% analogously
 
 #' Corresponds to the null-coalesce operator \code{??} in C#
 `%else%` <- function (a, b)
     if(is.null(a) || is.na(a) || is.nan(a) || length(a) == 0) b else a
-
-# Creates a lazy value retrieval function. `.(x)() == x`.
-# The retrieval function swallows all its arguments.
-. <- function (x) function (...) x
-
-fun <- function (...) {
-    args <- match.call(expand.dots = FALSE)$...
-    last <- length(args)
-    params <- c(args[-last], names(args)[[last]])
-    if (length(args) > 1 && length(params) != length(args))
-        stop('Must be of the form `fun(a, b = expr)`')
-    for (arg in args[-last])
-        if (! is.name(arg))
-            stop('Invalid argument specifier: ', arg)
-
-    enclos <- parent.frame()
-
-    function (...) {
-        dots <- list(...)
-        if (length(dots) < length(params))
-            stop('Argument(s) missing')
-        else if (length(dots) > length(params))
-            stop('Unused argument(s)')
-        eval(args[[length(args)]], setNames(dots, params), enclos)
-    }
-}
