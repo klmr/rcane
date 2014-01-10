@@ -32,7 +32,7 @@ progress <- function (x, max = 100) {
 
 #' @TODO Integrate with functional … re-think organisation!
 map_with_progress <- function (f, ...) {
-    max_progress <- mapply(function (x) max(length(x)), list(...))
+    max_progress <- max(mapply(length, list(...)))
     progress(0, max_progress)
     invisible(Map(function (i, ...) {
         on.exit(progress(i, max_progress))
