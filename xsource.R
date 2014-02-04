@@ -60,6 +60,7 @@ xsource <- function (module, attach = TRUE) {
         stop('Unable to load module ', module, '; not found in ',
              paste(Map(function (p) sprintf('"%s"', p), searchPath), collapse = ', '))
 
+    #' @TODO Put `.hits` into parent environment, which in turn has `globalenv` as parent.
     xenv <- new.env(parent = globalenv())
     class(xenv) <- 'xsourceenv'
     xenv$.hits <- hits
