@@ -168,5 +168,4 @@ neg <- lp(compose, `!`)
 #' @TODO Add %or% and %and% analogously
 
 #' Corresponds to the null-coalesce operator \code{??} in C#
-`%else%` <- function (a, b)
-    if(is.null(a) || is.na(a) || is.nan(a) || length(a) == 0) b else a
+`%else%` = function (a, b) if (identical(a, FALSE) || is.null(a) || length(a) == 0) b else a
