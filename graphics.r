@@ -1,6 +1,6 @@
 # Graphics helpers
 
-import('functional', attach = TRUE)
+import('./functional', attach = TRUE)
 
 # Color helper functions {{{
 transparent <- function (colors, alpha = 0.5) {
