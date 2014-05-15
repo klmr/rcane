@@ -115,15 +115,6 @@ reduce <- base::Reduce
 # Hides `stats::filter` but I don't care.
 filter <- base::Filter
 
-groupby <- function (data, cond, FUN = sum) {
-    if (! is.list(cond))
-        cond <- list(cond)
-    result <- aggregate(data, by = cond, FUN)
-    rownames(result) <- result[[1]]
-    result[[1]] <- NULL
-    result
-}
-
 # }}}
 
 # Helpers for working with ranges {{{
