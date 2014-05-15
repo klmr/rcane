@@ -51,14 +51,15 @@ symlist <- function (names)
 # Tools for function composition and chaining {{{
 
 #' Partial function application from right to left.
-#' NB: this is the opposite from the (wrongly-named) roxygen::Curry:
 #'
-#'   minus <- function (x, y) x - y
-#'   partial(minus, 5)(1) == -4
+#' @note This is the opposite from the (wrongly-named) \code{roxygen::Curry}:
+#'
+#'   \code{minus <- function (x, y) x - y
+#'   partial(minus, 5)(1) == -4}
 #'
 #' But:
 #'
-#'   partial(minus, x = 5)(1) == 4
+#'   \code{partial(minus, x = 5)(1) == 4}
 #'
 partial <- function (f, ...)
     let(capture = list(...),
@@ -81,28 +82,30 @@ p <- partial
 lp <- lpartial
 pp <- ppartial
 
-#' Compose functions `g` and `f`. `compose(g, f)(...) = g(f(...))`.
-#' NB: Functions are applied in the inverse order of `roxygen::Compose`.
-#' <http://tolstoy.newcastle.edu.au/R/e9/help/10/02/4529.html>
+#' Compose functions \code{g} and \code{f}.
+#'
+#' \code{compose(g, f)(...) = g(f(...))}.
+#'
+#' @note Functions are applied in the inverse order of \code{roxygen::Compose}:
+#' \url{http://tolstoy.newcastle.edu.au/R/e9/help/10/02/4529.html}
 compose <- function (g, f)
     function (...) g(f(...))
 
-# Dot operator (as in Haskell)
+#' Dot operator (as in Haskell)
 `%.%` <- compose
 
-# Function chaining operator (as in F#)
+#' Function chaining operator (as in F#)
 `%|>%` <- function (g, f) compose(f, g)
 
-# Pipe operator modified after idea from Robert Sugar, e.g. at
-# <http://markmail.org/thread/uygwsdulfvxlydlh>
+#' Pipe operator as in Bash
 `%|%` <- function (x, y) y(x)
 
 # }}}
 
 # Higher-order list functions {{{
 
+#' Applies a list of functions to the same argument.
 #' @TODO Extend to more than one argument
-# Applies a list of functions to the same argument.
 fapply <- function (x, ...)
     lapply(list(...), function (f) f(x))
 
@@ -125,11 +128,13 @@ boolmask <- function (indices, length)
 
 indices <- seq_along
 
-# Conditionally count elements.
+#' Conditionally count elements.
 count <- length %.% which
 
-# Wrapper around `order` that returns the ordered data rather than the index
-# permutation. Like `sort`, but allows specifying multiple sort keys.
+#' Wrapper around \{order} that returns the ordered data rather than the index
+#' permutation.
+#'
+#' Like \code{sort}, but allows specifying multiple sort keys.
 sorted <- function (data, ..., decreasing = FALSE)
     let(key = if (length(list(...)) == 0) colnames(data) else list(...),
         data[do.call(order, c(lapply(key, lp(`[[`, data)), decreasing = decreasing)), ])
@@ -148,16 +153,20 @@ cdict <- function (...) {
 
 # }}}
 
-# Creates an item selector function for a given item
+#' Create an item selector function for a given item
 item <- lp(p, `[[`)
 
 items <- lp(p, `[`)
 
-# Negates a function. Similar to `base::Negate`.
+#' Negate a function.
+#'
+#' Similar to \code{base::Negate}
 neg <- p(compose, `!`)
 
 #' @TODO Add %or% and %and% analogously
 
+#' Use the first value if present, else the second
+#'
 #' Corresponds to the null-coalesce operator \code{??} in C#
 `%else%` <- function (a, b)
     if(is.null(a) || is.na(a) || is.nan(a) || length(a) == 0) b else a
