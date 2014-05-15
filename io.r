@@ -1,5 +1,6 @@
 # I/O helper functions
 
+#' Add \code{ext}ension parameter to \link{\code{base::file.path}}
 file.path <- function (..., ext = NULL, fsep = .Platform$file.sep) {
     dots <- list(...)
     if (! is.null(ext)) {
@@ -11,6 +12,7 @@ file.path <- function (..., ext = NULL, fsep = .Platform$file.sep) {
 }
 
 #' Augment \code{\link{utils::read.table}} by a mechanism to guess the file format.
+#'
 #' For the moment, only separators are handled based on the file extension.
 #' This might change in the future to be more powerful, think Python’s
 #' \code{csv.Sniffer} class.
