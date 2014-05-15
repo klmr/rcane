@@ -1,5 +1,6 @@
 # Sequence analysis basics
 
+#' Reverse complement sequences
 revcomp <- function (strs) {
     rc <- function (str) {
         bases <- strsplit(str, '')[[1]]
